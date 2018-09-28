@@ -10,11 +10,13 @@ pipeline{
 						}
 					}
 					steps{
-						git 'git@github.com:huobaohai/learngit.git'
+						git 'https://github.com/huobaohai/learngit.git'
 					}
 				}
 				stage('Second Preparation'){
-					agent any
+					agent{
+						label 'win'
+					}
 					steps{
 						bat 'echo second'
 					}
@@ -22,7 +24,9 @@ pipeline{
 			}
 		}
 		stage('Build'){
-			agent any
+			agent{
+				label 'master'
+			}
 			steps{
 				bat 'echo build'
 			}
@@ -30,14 +34,19 @@ pipeline{
 		stage('Test'){
 			parallel{
 				stage('node 1'){
-					agent any
+					agent{
+						label 'master'
+					}
 					steps{
 						bat 'echo test node 1'
 					}
 				}
 				stage('node 2'){
+					agent{
+						label 'win'
+					}
 					steps{
-						bat 'echo test node 1'
+						bat 'echo test node 2'
 					}
 				}
 			}
