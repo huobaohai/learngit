@@ -1,0 +1,46 @@
+pipeline{
+	agent none
+	stages{
+		stage('Preparation'){
+			parallel{
+				stage('Preparation'){
+					agent{
+						node{
+							label 'master'
+						}
+					}
+					steps{
+						git 'git@github.com:huobaohai/learngit.git'
+					}
+				}
+				stage('Second Preparation'){
+					agent any
+					steps{
+						bat 'echo second'
+					}
+				}
+			}
+		}
+		stage('Build'){
+			agent any
+			steps{
+				bat 'echo build'
+			}
+		}
+		stage('Test'){
+			parallel{
+				stage('node 1'){
+					agent any
+					steps{
+						bat 'echo test node 1'
+					}
+				}
+				stage('node 2'){
+					steps{
+						bat 'echo test node 1'
+					}
+				}
+			}
+		}
+	}
+}
